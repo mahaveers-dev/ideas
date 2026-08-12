@@ -17,6 +17,11 @@ enum IdeaStatus: string
         };
     }
 
+    public static function values()
+    {
+        return array_map(fn($status) => $status->value, static::cases());
+    }
+
     public function tagColors(): string
     {
         return match ($this) {

@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 #[UseFactory(IdeaFactory::class)]
 class Idea extends Model
@@ -25,6 +26,20 @@ class Idea extends Model
         'status' => IdeaStatus::PENDING->value,
     ];
 
+    public static function statusCounts(User $user): Collection
+    {
+        $counts = $user->ideas()
+            ->selectRaw('status, count(*) as count')
+            ->groupBy('status')
+            ->pluck('count', 'status');
+
+        return collect(IdeaStatus::cases())
+            ->mapWithKeys(fn($status) => [
+                $status->value => $counts->get($status->value, 0)
+            ])
+            ->put('all', $user->ideas()->count());
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -34,4 +49,6 @@ class Idea extends Model
     {
         return $this->hasMany(Step::class);
     }
+
+
 }
