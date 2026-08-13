@@ -13,13 +13,12 @@ use Illuminate\Support\Facades\Route;
 # Route::get('/', fn () => view('welcome'));
 Route::redirect('/', '/ideas');
 
-Route::get('/ideas', [IdeaController::class, 'index'])->middleware('auth');
-Route::get('/ideas/create', [IdeaController::class, 'create'])->name('ideas.create')->middleware('auth');
-// Route::post('/ideas', [IdeaController::class, 'store'])->name('ideas.store');
+Route::get('/ideas', [IdeaController::class, 'index'])->name('ideas.index')->middleware('auth');
+Route::post('/ideas', [IdeaController::class, 'store'])->name('ideas.store')->middleware('auth');
 Route::get('/ideas/{idea}', [IdeaController::class, 'show'])->name('ideas.show')->middleware('auth');
 // Route::get('/ideas/{idea}/edit', [IdeaController::class, 'edit'])->name('ideas.edit');
 // Route::patch('/ideas/{idea}', [IdeaController::class, 'update'])->name('ideas.update');
-// Route::delete('/ideas/{idea}', [IdeaController::class, 'destroy'])->name('ideas.delete');
+Route::delete('/ideas/{idea}', [IdeaController::class, 'destroy'])->name('ideas.destroy')->middleware('auth');
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisteredUserController::class, 'create']);
