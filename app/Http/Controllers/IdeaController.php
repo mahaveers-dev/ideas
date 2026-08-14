@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreIdeaRequest;
+use App\Actions\CreateIdea;
+use App\Actions\UpdateIdea;
+use App\Http\Requests\IdeaRequest;
 use App\IdeaStatus;
 use App\Models\Idea;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Gate;
 
 class IdeaController extends Controller
 {
@@ -41,11 +43,10 @@ class IdeaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreIdeaRequest $request)
+    public function store(IdeaRequest $request, CreateIdea $action)
     {
-        #dd($request->all());
-        Auth::user()->ideas()->create($request->validated());
-
+        $action->handle($request->safe()->all());
+        
         return to_route('ideas.index')->with('success', 'Idea created successfully.');
     }
 
@@ -54,6 +55,8 @@ class IdeaController extends Controller
      */
     public function show(Idea $idea)
     {
+        # Gate::authorize('workWith', $idea);
+        
         return view('ideas.show', [
             'idea' => $idea
         ]);
@@ -64,15 +67,19 @@ class IdeaController extends Controller
      */
     public function edit(Idea $idea)
     {
-        //
+        Gate::authorize('workWith', $idea);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Idea $idea)
+    public function update(IdeaRequest $request, Idea $idea, UpdateIdea $action)
     {
-        //
+        Gate::authorize('workWith', $idea);
+
+        $action->handle($request->safe()->all(), $idea);
+
+        return back()->with('success', 'Idea updated successfully.');
     }
 
     /**
@@ -80,6 +87,8 @@ class IdeaController extends Controller
      */
     public function destroy(Idea $idea)
     {
+        Gate::authorize('workWith', $idea);
+        
         $idea->delete();
 
         return to_route('ideas.index')->with('success', 'Idea deleted successfully.');

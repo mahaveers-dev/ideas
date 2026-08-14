@@ -1,0 +1,17 @@
+<?php
+
+namespace App\Policies;
+
+use App\Models\Idea;
+use App\Models\User;
+
+class IdeaPolicy
+{
+    /**
+     * Determine whether the user can work with any idea models.
+     */
+    public function workWith(User $user, Idea $idea): bool
+    {
+        return $idea->user->is($user);
+    }
+}

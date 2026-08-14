@@ -7,10 +7,15 @@
             </a>
 
             <div class="gap-x-3 flex items-center">
-                <button class="btn btn-outlined">
+                <button 
+                    x-data
+                    class="btn btn-outlined"
+                    @click="$dispatch('open-modal', 'edit-idea')"
+                >
                     <x-icons.external />
                     Edit Idea
                 </button>
+
                 <form action="{{route('ideas.destroy', $idea)}}" method="POST">
                     @csrf
                     @method('DELETE')
@@ -19,6 +24,13 @@
             </div>
         </div>
         <div class="mt-8 space-y-6">
+
+            @if($idea->image_path)
+                <div class="rounded-lg overflow-hidden">
+                    <img src="{{ asset('storage/' . $idea->image_path) }}" alt="{{ $idea->title }}" class="w-full h-auto object-cover" />
+                </div>
+            @endif
+
             <h1 class="font-bold text-4xl">{{ $idea->title }}</h1>
             
             <div class="mt-2 flex gap-x-3 items-center">
@@ -27,10 +39,37 @@
                 </x-idea.status-label>
                 <div class="text-muted-foreground text-sm">{{ $idea->created_at->diffForHumans() }}</div>
             </div>
+            @if($idea->description)
+                <x-card is="div" class="mt-6">
+                    <div class="text-foreground max-w-none cursor-pointer prose prose-invert">
+                        {!! $idea->formattedDescription !!}
+                    </div>
+                </x-card>
+            @endif
+             @if($idea->steps->count())
+            <div>
+                <h3 class="font-bold text-xl mt-6">Actionable Steps</h3>
 
-            <x-card class="mt-6">
-                <div class="text-foreground max-w-none cursor-pointer">{{ $idea->description }}</div>
-            </x-card>
+                <div class="mt-3 space-y-2">
+                    @foreach($idea->steps as $step)
+                        <x-card>
+                            <form method="POST" action="{{ route('step.upddate', $step) }}">
+                                @csrf
+                                @method('PATCH')
+                                <div class="flex items-center gap-x-3">
+                                    <button 
+                                        type="submit"
+                                        role="checkbox"
+                                        class="size-5 flex items-center justify-center rounded-lg text-primary-foreground {{ $step->completed ? 'bg-primary' : 'border border-primary' }}">&check;</button>
+                                    <span class="{{ $step->completed ? 'line-through text-muted-foreground' : '' }}">{{ $step->description }}</span>
+                                </div>
+                            </form>
+                        </x-card>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
             @if($idea->links->count())
             <div>
                 <h3 class="font-bold text-xl mt-6">Links</h3>
@@ -46,5 +85,7 @@
             @endif
         </div>
 
+        <!-- edit idea modal -->
+        <x-idea.modal :idea="$idea"/>
     </div>
 </x-layout>

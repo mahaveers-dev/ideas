@@ -35,8 +35,8 @@ class SessionsController extends Controller
         }
 
         $request->session()->regenerate();
-
-        return redirect()->intended('/')->with('success', 'You have successfully logged in.');
+        
+        return redirect()->intended(route('ideas.index'))->with('success', 'You have successfully logged in.');
     }
 
     /**

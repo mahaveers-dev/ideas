@@ -11,8 +11,10 @@
         <title>{{ $title }}</title>
 
         <!-- Fonts -->
+        {{-- 
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+        --}}
 
         <!-- Styles / Scripts -->
         @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
@@ -22,11 +24,6 @@
     <body class="bg-background text-foreground">
         <x-layout.nav />
         <!-- Page Content -->
-        {{--
-        <main class="max-w-7xl mx-auto px-6 py-6">
-            {{ $slot }}
-        </main>
-        --}}
         <main class="max-w-7xl mx-auto px-6">
             {{ $slot }}
         </main>
@@ -40,15 +37,6 @@
                 class="bg-primary px-6 py-3 absolute bottom-4 right-4 rounded-lg">
                 {{ $value }}
             </div>
-            {{--
-            <div
-            x-data="{show: true}"
-            x-init="setTimeout(()=> show = false, 3000)"
-            x-show="show"
-            x-transition.opacity.duration.600ms
-            class="fixed top-24 right-4 bg-primary text-white/75 px-6 py-3 rounded-xl shadow-lg">
-            {{ session('success') }}</div>
-            --}}
         @endsession
     </body>
 </html>

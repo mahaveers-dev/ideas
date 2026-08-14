@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@plugin "@tailwindcss/typography";
 
 @import './components/btn.css' layer(components);
 @import './components/form.css' layer(components);
