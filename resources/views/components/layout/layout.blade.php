@@ -28,6 +28,9 @@
             {{ $slot }}
         </main>
         
+        <footer class="px-6 py-6 mt-10 border-t border-border text-sm text-muted-foreground text-center">
+            © {{ date('Y') }} Your Company, Inc. All rights reserved.
+        </footer>
         @session('success')
             <div 
                 x-data="{show: true}"
