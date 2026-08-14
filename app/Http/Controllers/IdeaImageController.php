@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Models\Idea;
@@ -15,7 +17,7 @@ class IdeaImageController extends Controller
         Storage::disk('public')->delete($idea->image_path);
 
         $idea->update(['image_path' => null]);
-        
+
         return back();
     }
 }

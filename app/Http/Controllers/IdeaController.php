@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Actions\CreateIdea;
@@ -21,21 +23,21 @@ class IdeaController extends Controller
         $user = Auth::user();
 
         $ideas = $user
-                ->ideas()
-                ->when(in_array($request->status, IdeaStatus::values()), fn($query) => $query->where('status', $request->status))
-                ->latest()
-                ->get();
+            ->ideas()
+            ->when(in_array($request->status, IdeaStatus::values()), fn ($query) => $query->where('status', $request->status))
+            ->latest()
+            ->get();
 
         return view('ideas.index', [
             'ideas' => $ideas,
-            'statusCounts' => Idea::statusCounts($user)
+            'statusCounts' => Idea::statusCounts($user),
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): void
     {
         //
     }
@@ -46,7 +48,7 @@ class IdeaController extends Controller
     public function store(IdeaRequest $request, CreateIdea $action)
     {
         $action->handle($request->safe()->all());
-        
+
         return to_route('ideas.index')->with('success', 'Idea created successfully.');
     }
 
@@ -55,17 +57,17 @@ class IdeaController extends Controller
      */
     public function show(Idea $idea)
     {
-        # Gate::authorize('workWith', $idea);
-        
+        // Gate::authorize('workWith', $idea);
+
         return view('ideas.show', [
-            'idea' => $idea
+            'idea' => $idea,
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Idea $idea)
+    public function edit(Idea $idea): void
     {
         Gate::authorize('workWith', $idea);
     }
@@ -88,7 +90,7 @@ class IdeaController extends Controller
     public function destroy(Idea $idea)
     {
         Gate::authorize('workWith', $idea);
-        
+
         $idea->delete();
 
         return to_route('ideas.index')->with('success', 'Idea deleted successfully.');

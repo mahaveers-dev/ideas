@@ -15,11 +15,11 @@ return new class extends Migration
         Schema::create('ideas', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
-            $table->string('title');            
+            $table->string('title');
             $table->text('description')->nullable();
             $table->string('status')->default('pending');
             $table->string('image_path')->nullable();
-            $table->json('links')->default('[]');            
+            $table->json('links')->default('[]');
             $table->timestamps();
         });
     }

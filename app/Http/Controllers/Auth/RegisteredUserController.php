@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -34,7 +36,7 @@ class RegisteredUserController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => $request->password, # Don't need add Hash, because password is cast hash by default
+            'password' => $request->password, // Don't need add Hash, because password is cast hash by default
         ]);
 
         Auth::login($user);

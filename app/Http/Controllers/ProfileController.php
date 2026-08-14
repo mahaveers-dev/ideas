@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Notifications\EmailChanged;
@@ -17,7 +19,7 @@ class ProfileController extends Controller
     public function edit()
     {
         return view('profile.edit', [
-            'user' => Auth::user()
+            'user' => Auth::user(),
         ]);
     }
 
@@ -32,7 +34,7 @@ class ProfileController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => [
                 'required', 'string', 'email', 'max:255',
-                Rule::unique('users', 'email')->ignore($user->id)
+                Rule::unique('users', 'email')->ignore($user->id),
             ],
             'password' => ['nullable', Password::defaults()],
         ]);
@@ -49,6 +51,7 @@ class ProfileController extends Controller
             Notification::route('mail', $originalEmail)
                 ->notify(new EmailChanged($user, $originalEmail));
         }
+
         return to_route('profile.edit')->with('success', 'Profile updated.');
     }
 }
