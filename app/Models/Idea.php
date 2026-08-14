@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\IdeaStatus;
 use Database\Factories\IdeaFactory;
-use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
+use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -35,8 +37,8 @@ class Idea extends Model
             ->pluck('count', 'status');
 
         return collect(IdeaStatus::cases())
-            ->mapWithKeys(fn($status) => [
-                $status->value => $counts->get($status->value, 0)
+            ->mapWithKeys(fn ($status) => [
+                $status->value => $counts->get($status->value, 0),
             ])
             ->put('all', $user->ideas()->count());
     }
@@ -53,7 +55,6 @@ class Idea extends Model
 
     public function formattedDescription(): Attribute
     {
-        return Attribute::get(fn($value, $attributes) => str($attributes['description'])->markdown());
+        return Attribute::get(fn ($value, $attributes) => str($attributes['description'])->markdown());
     }
-
 }

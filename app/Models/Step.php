@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\IdeaStatus;
@@ -15,6 +17,7 @@ class Step extends Model
     use HasFactory;
 
     protected $fillable = [];
+
     protected $attributes = [
         'completed' => false,
     ];

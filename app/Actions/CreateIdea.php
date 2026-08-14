@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions;
 
 use App\Models\User;
@@ -12,8 +14,8 @@ class CreateIdea
     {
         //
     }
-    
-    public function handle(array $attributes)
+
+    public function handle(array $attributes): void
     {
 
         $data = collect($attributes)->only([
@@ -27,7 +29,7 @@ class CreateIdea
             $data['image_path'] = $attributes['image']->store('ideas', 'public');
         }
 
-        # $steps = collect($attributes['steps'] ?? [])->map(fn($step) => ['description' => $step]);
+        // $steps = collect($attributes['steps'] ?? [])->map(fn($step) => ['description' => $step]);
 
         DB::transaction(function () use ($data, $attributes) {
             $idea = $this->user->ideas()->create($data);

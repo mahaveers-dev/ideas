@@ -10,16 +10,15 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StepController;
 use Illuminate\Support\Facades\Route;
 
-
-# Route::get('/', fn () => view('welcome'));
+// Route::get('/', fn () => view('welcome'));
 Route::redirect('/', '/ideas');
 
 Route::get('/ideas', [IdeaController::class, 'index'])->name('ideas.index')->middleware('auth');
 Route::post('/ideas', [IdeaController::class, 'store'])->name('ideas.store')->middleware('auth');
 Route::get('/ideas/{idea}', [IdeaController::class, 'show'])
-        ->name('ideas.show')
-        ->middleware('auth')
-        ->can('workWith', 'idea');
+    ->name('ideas.show')
+    ->middleware('auth')
+    ->can('workWith', 'idea');
 
 Route::patch('/ideas/{idea}', [IdeaController::class, 'update'])->name('ideas.update');
 Route::delete('/ideas/{idea}', [IdeaController::class, 'destroy'])->name('ideas.destroy')->middleware('auth');

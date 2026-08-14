@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App;
 
 enum IdeaStatus: string
@@ -17,9 +19,9 @@ enum IdeaStatus: string
         };
     }
 
-    public static function values()
+    public static function values(): array
     {
-        return array_map(fn($status) => $status->value, static::cases());
+        return array_map(fn (IdeaStatus $status) => $status->value, self::cases());
     }
 
     public function tagColors(): string
